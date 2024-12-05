@@ -2,6 +2,7 @@ import express from 'express';
 import { z } from 'zod';
 import { db, jwtsecret } from '../../index';
 import jwt from 'jsonwebtoken';
+import { checkStatus } from '../../checkStatus';
 
 const websiteRoute = express.Router();
 
@@ -80,5 +81,19 @@ websiteRoute.get('/all', async (req, res) => {
         });
     }
 });
+
+// add auth middleware
+websiteRoute.get('/check', async(req, res) => {
+    try {
+        const { url } = z.object(zodWebsiteSchema).parse(req.body);
+        const data = await checkStatus({ url });
+        res.json(data);
+    } catch (error: any) {
+        res.json({
+            message: 'Failed to check website',
+            error: error,
+        });
+    }
+})
 
 export default websiteRoute;
