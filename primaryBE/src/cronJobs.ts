@@ -11,7 +11,8 @@ export async function getLatestStatus() {
         for (let i = 0; i < websites.length; i++) {
             const url = websites[i];
             const wsStatus = await checkStatus({ url });
-            if (wsStatus.status != 'UP') 
+            
+            if (wsStatus.data.status != 'UP') 
                 console.log(`${url} is down`);
                 // TODO: send email
         }

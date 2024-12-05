@@ -3,7 +3,6 @@ import { z } from 'zod';
 import { client, db, jwtsecret } from '../../index';
 import jwt from 'jsonwebtoken';
 import { checkStatus } from '../../checkStatus';
-import { getLatestStatus } from '../../cronJobs';
 
 const websiteRoute = express.Router();
 
@@ -22,10 +21,17 @@ websiteRoute.post('/create', async (req, res) => {
         const decodedToken = jwt.verify(token, jwtsecret) as jwt.JwtPayload & { userId: number };
         console.log(decodedToken);
 
-        const website = await db.websites.create({
-            data: {
+        const website = await db.websites.upsert({
+            where: {
+                id: `${decodedToken.userId}-${url}`,
+            },
+            create: {
+                id: `${decodedToken.userId}-${url}`,
                 url: url,
                 userId: `${decodedToken.userId}`,
+            },
+            update: {
+                url: url,
             },
         });
         const exists = await client.lRange('websites', 0, -1);
@@ -99,9 +105,19 @@ websiteRoute.get('/all', async (req, res) => {
     }
 });
 
-// add auth middleware
 websiteRoute.get('/check', async(req, res) => {
     try {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+        const decodedToken = jwt.verify(token, jwtsecret) as jwt.JwtPayload & { userId: number };
+        if(!decodedToken) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+
         const { url } = z.object(zodWebsiteSchema).parse(req.body);
         const data = await checkStatus({ url });
         res.json(data);

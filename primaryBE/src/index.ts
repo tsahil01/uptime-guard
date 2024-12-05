@@ -3,6 +3,8 @@ import cors from 'cors';
 import router from './routes';
 import { PrismaClient } from '@prisma/client';
 import { createClient } from 'redis';
+import cron from 'node-cron';
+import { checkDbWithRedis, getLatestStatus } from './cronJobs';
 
 const app = express();
 const port = 4000;
@@ -22,6 +24,17 @@ app.use(cors())
 
 // add all routes
 app.use('/api', router)
+
+// run cron jobs
+cron.schedule('*/61 * * * * *', async () => {
+    console.log('running a task every 61 seconds');
+    await getLatestStatus();
+})
+
+cron.schedule('*/5 * * * *', async () => {
+    console.log('running a task every 5 minutes');
+    await checkDbWithRedis();
+})
 
 
 app.listen(port, () => {
