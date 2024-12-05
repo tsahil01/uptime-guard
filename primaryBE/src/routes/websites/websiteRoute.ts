@@ -1,13 +1,14 @@
 import express from 'express';
 import { z } from 'zod';
-import { db, jwtsecret } from '../../index';
+import { client, db, jwtsecret } from '../../index';
 import jwt from 'jsonwebtoken';
 import { checkStatus } from '../../checkStatus';
+import { getLatestStatus } from '../../cronJobs';
 
 const websiteRoute = express.Router();
 
 const zodWebsiteSchema = {
-    url: z.string(),
+    url: z.string().url(),
 };
 
 websiteRoute.post('/create', async (req, res) => {
@@ -27,10 +28,18 @@ websiteRoute.post('/create', async (req, res) => {
                 userId: `${decodedToken.userId}`,
             },
         });
+        const exists = await client.lRange('websites', 0, -1);
+        if (! exists.includes(url)) {
+            await client.rPush('websites', url)
+        }
+
+        const wsStatus = await checkStatus({ url });
 
         res.json({
-            website,
+            db: website,
+            wsStatus,
             msg: 'Website created successfully',
+
         });
     } catch (error: any) {
         res.json({
@@ -56,9 +65,17 @@ websiteRoute.get('/userAll', async (req, res) => {
             },
         });
 
+        // we can do this, but it will be a lot of requests
+        // so we can give a button in the frontend to check all websites
+        // let wsStatus = [];
+        // for (let i = 0; i < websites.length; i++) {
+        //     wsStatus.push(await checkStatus({ url: websites[i].url }));
+        // }
+
         res.json({
             userId: decodedToken.userId,
             websites,
+            // wsStatus,
         });
     } catch (error: any) {
         res.json({
@@ -97,3 +114,4 @@ websiteRoute.get('/check', async(req, res) => {
 })
 
 export default websiteRoute;
+
