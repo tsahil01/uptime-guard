@@ -1,33 +1,35 @@
 import { client, db } from ".";
 import { checkStatus } from "./checkStatus";
 
-// 2 crone jobs are required - 
-
-// 1. to check redis array of urls and check their status. 
-// If status is down, send an email to the user - every 60 seconds
 export async function getLatestStatus() {
     try {
         const websites = await client.lRange('websites', 0, -1);
         for (let i = 0; i < websites.length; i++) {
-            const url = websites[i];
+            const ws = JSON.parse(websites[i]);
+            console.log("ws: ", ws);
+            const url = ws.url;
             const wsStatus = await checkStatus({ url });
-            
-            if (wsStatus.data.status != 'UP') 
-                console.log(`${url} is down`);
+
+            if (wsStatus.data.status != 'UP'){
+                console.log(`${url} is down. sending email to ${ws.email} `);
                 // TODO: send email
+            }
         }
     } catch (error: any) {
         console.log('Failed to get latest status', error);
     }
 }
 
-// 2. to check if db data is in sync with redis data - every 5 minutes  
 export async function checkDbWithRedis() {
     try {
-        const dbWebsites = await db.websites.findMany();
+        const dbWebsites = await db.websites.findMany({ include: { user: true } });
         await client.del('websites');
         for (let i = 0; i < dbWebsites.length; i++) {
-            await client.rPush('websites', dbWebsites[i].url);
+            const website = {
+                url: dbWebsites[i].url,
+                email: dbWebsites[i].user.email,
+            }
+            await client.rPush('websites', JSON.stringify(website));
         }
 
         console.log('db and redis in sync');
