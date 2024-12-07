@@ -6,7 +6,7 @@ import { ArrowRight } from "lucide-react";
 
 export function LetsGo() {
     return (
-        <div className="bg-primary/5">
+        <div className="bg-primary/5 dark:bg-black">
             <section className="container py-24 space-y-8">
                 <div className="text-center">
                     <h2 className="text-3xl font-bold tracking-tight mb-4">
