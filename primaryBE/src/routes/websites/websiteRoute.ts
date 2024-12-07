@@ -21,19 +21,14 @@ websiteRoute.post('/create', async (req, res) => {
         const decodedToken = jwt.verify(token, jwtsecret) as jwt.JwtPayload & { userId: number };
         console.log(decodedToken);
 
-        const website = await db.websites.upsert({
-            where: {
-                id: `${decodedToken.userId}-${url}`,
-            },
-            create: {
-                id: `${decodedToken.userId}-${url}`,
-                url: url,
-                userId: `${decodedToken.userId}`,
-            },
-            update: {
-                url: url,
-            },
-        });
+        const website = await db.websites.create(
+            {
+                data: {
+                    url,
+                    userId: `${decodedToken.userId}`,
+                },
+            }
+        );
         const exists = await client.lRange('websites', 0, -1);
         if (! exists.includes(url)) {
             await client.rPush('websites', url)
@@ -105,7 +100,7 @@ websiteRoute.get('/all', async (req, res) => {
     }
 });
 
-websiteRoute.get('/check', async(req, res) => {
+websiteRoute.get('/check', async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];
         if (!token) {
@@ -113,12 +108,12 @@ websiteRoute.get('/check', async(req, res) => {
             return;
         }
         const decodedToken = jwt.verify(token, jwtsecret) as jwt.JwtPayload & { userId: number };
-        if(!decodedToken) {
+        if (!decodedToken) {
             res.status(401).json({ message: 'Unauthorized' });
             return;
         }
 
-        const { url } = z.object(zodWebsiteSchema).parse(req.body);
+        const { url } = z.object(zodWebsiteSchema).parse(req.query);
         const data = await checkStatus({ url });
         res.json(data);
     } catch (error: any) {
@@ -127,7 +122,45 @@ websiteRoute.get('/check', async(req, res) => {
             error: error,
         });
     }
-})
+});
+
+
+websiteRoute.get('/:id', async (req, res) => {
+    try {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+        const decodedToken = jwt.verify(token, jwtsecret) as jwt.JwtPayload & { userId: number };
+        console.log(decodedToken);
+        console.log(req.params.id);
+
+        const website = await db.websites.findUnique({
+            where: {
+                id: req.params.id,
+            },
+        });
+        console.log(website);
+
+        if (website?.userId !== `${decodedToken.userId}`) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+
+        const wsStatus = await checkStatus({ url: website.url });
+
+        res.json({
+            website,
+            wsStatus,
+        });
+    } catch (error: any) {
+        res.json({
+            message: 'Failed to fetch website',
+            error: error,
+        });
+    }
+});
 
 export default websiteRoute;
 

@@ -18,7 +18,7 @@ const axios_1 = __importDefault(require("axios"));
 const zod_1 = __importDefault(require("zod"));
 const redis_1 = require("redis");
 const app = (0, express_1.default)();
-const port = 3000;
+const port = 5000;
 app.use(express_1.default.json());
 app.use((0, cors_1.default)());
 const urlSchema = zod_1.default.string().url();

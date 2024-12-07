@@ -1,1 +1,1 @@
-export const healthCheckerRoute = "http://localhost:3000";
+export const healthCheckerRoute = "http://localhost:5000";
