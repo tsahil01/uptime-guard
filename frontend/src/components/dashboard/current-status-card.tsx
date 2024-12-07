@@ -3,7 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 
 export function CurrentStatusCard({ up, down }: { up: number, down: number }) {
     return <>
-        <Card className="px-5 h-[250px]">
+        <Card className="px-5 h-[250px] bg-primary/5">
             <CardHeader>
                 <CardTitle>Current Status</CardTitle>
             </CardHeader>

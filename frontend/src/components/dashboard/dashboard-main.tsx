@@ -1,46 +1,10 @@
-import { Activity, Check, AlertTriangle, Plus, Zap } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Plus, Zap } from 'lucide-react';
 import { Button } from "../ui/button";
 import { CurrentStatusCard } from './current-status-card';
 import { WebsitesDiv } from './websites-div';
-import { WebsiteInterface } from '@/types/website-types';
+import { IWebsite } from '@/types/types';
 
-export function DashboardMain() {
-    const websites: WebsiteInterface[] = [
-        {
-            name: 'https://www.google.com',
-            url: 'https://www.google.com',
-            status: 'up',
-            uptime: '100%',
-            responseTime: '100ms',
-            lastChecked: '2021-09-01T00:00:00Z',
-        },
-        {
-            name: 'https://www.facebook.com',
-            url: 'https://www.facebook.com',
-            status: 'down',
-            uptime: '0%',
-            responseTime: '0ms',
-            lastChecked: '2021-09-01T00:00:00Z',
-        },
-        {
-            name: 'https://www.twitter.com',
-            url: 'https://www.twitter.com',
-            status: 'up',
-            uptime: '100%',
-            responseTime: '100ms',
-            lastChecked: '2021-09-01T00:00:00Z',
-        },
-        {
-            name: 'https://www.instagram.com',
-            url: 'https://www.instagram.com',
-            status: 'down',
-            uptime: '0%',
-            responseTime: '0ms',
-            lastChecked: '2021-09-01T00:00:00Z',
-        },
-    ];
-
+export function DashboardMain({ websites }: { websites: IWebsite[] }) {
     return (
         <section className="container py-10 space-y-8">
             <div className="flex md:flex-row flex-col gap-4">
@@ -49,7 +13,7 @@ export function DashboardMain() {
                         <h2 className="text-2xl font-bold tracking-tight mb-4 text-left">
                             Monitors
                         </h2>
-                        <Button className="bg-blue-600">
+                        <Button className="bg-blue-500">
                             <Plus size={16} className="mr-1" />
                             New Monitor
                         </Button>

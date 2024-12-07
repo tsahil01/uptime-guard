@@ -1,24 +1,37 @@
-import { AlertTriangle, Check } from "lucide-react";
-import { Button } from "../ui/button";
-import { WebsiteInterface } from "@/types/website-types";
+"use client";
 
-export function WebsitesDiv({ website, index }: { website: WebsiteInterface, index: number }) {
+import { useRouter } from "next/navigation";
+import { IWebsite } from "@/types/types";
+
+export function WebsitesDiv({ website, index }: { website: IWebsite, index: number }) {
+    const user = "";
+    const router = useRouter();
+
+    function handleClick() {
+    }
+
     return (
         <>
-            <div key={index} className='flex flex-row justify-between border rounded-xl p-5 h-16'>
+            <div key={index} className='flex flex-row justify-between border rounded-xl p-9 h-16 bg-primary/5'>
                 <div className="flex items-center">
-                    <h3 className="text-md font-medium truncate max-w-[200px]">{website.name}</h3>
+                    <h3 className="text-md font-medium truncate max-w-[200px]">{website.url}</h3>
                 </div>
-                <div className='flex flex-row gap-4 items-center'>
+                {/* <div className='flex flex-row gap-4 items-center'>
                     {website.status === 'up' ? (
-                        <Check size={24} className="p-1 border rounded-full bg-green-100 text-green-600" />
+                        <>
+                        <div className="flex flex-row gap-2 p-2 border rounded-full px-4">
+                            <AudioLines size={24} className="text-green-400" />
+                        </div>
+                        </>
                     ) : (
-                        <AlertTriangle size={24} className="p-1 border rounded-full bg-red-100 text-red-600" />
+                        <div className="flex flex-row gap-2 p-2 border rounded-full px-4">
+                        <AudioLines size={24} className="text-red-400" />
+                    </div>
                     )}
-                    <Button variant={'outline'} size="sm">
-                        Check Status
+                    <Button variant={'outline'} size="sm" onClick={handleClick}>
+                        Open
                     </Button>
-                </div>
+                </div> */}
             </div>
         </>
     )
