@@ -1,5 +1,6 @@
 import { Shield, Gauge, Bell, Clock } from "lucide-react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { IconBrandTelegram } from "@tabler/icons-react";
 
 const features = [
   {
@@ -18,9 +19,9 @@ const features = [
     icon: Gauge,
   },
   {
-    title: "Secure & Reliable",
-    description: "We take security seriously, ensuring your data is safe and secure.",
-    icon: Shield,
+    title: "Telegram Integration",
+    description: "Receive alerts directly to your Telegram account for quick response.",
+    icon: IconBrandTelegram,
   },
 ];
 
