@@ -13,13 +13,13 @@ const features = [
     icon: Bell,
   },
   {
-    title: "Performance Metrics",
-    description: "Detailed insights into response times and availability.",
+    title: "5 Minute Intervals",
+    description: "Monitor your websites every minute to ensure they are always up.",
     icon: Gauge,
   },
   {
-    title: "SSL Monitoring",
-    description: "Track SSL certificate expiration and security status.",
+    title: "Secure & Reliable",
+    description: "We take security seriously, ensuring your data is safe and secure.",
     icon: Shield,
   },
 ];
