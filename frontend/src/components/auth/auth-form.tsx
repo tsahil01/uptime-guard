@@ -3,47 +3,56 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { useToast } from "@/hooks/use-toast";
 import { backendUrl } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 interface AuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   type: "signin" | "signup";
 }
 
-async function signup({ email, password }: { email: string; password: string }) {
-  try {
-    const response = await axios.post(`${backendUrl}/api/auth/signup`, { email, password });
-    console.log(response.data);
-    return response.data;
-  } catch (error) {
-    console.error("Error during signup:", error);
-    alert("Error during signup. Please try again.");
-  }
-}
-
-async function signin({ email, password }: { email: string; password: string }) {
-  try {
-    const response = await axios.post(`${backendUrl}/api/auth/signin`, { email, password });
-    console.log(response.data);
-
-    if (response.data.token) {
-      localStorage.setItem("token", response.data.token);
-      // Redirect to dashboard
-      window.location.href = "/dashboard";
-    }
-    return response.data;
-  } catch (error) {
-    console.error("Error during signin:", error);
-    alert("Error during signin. Please try again.");
-  }
-}
-
 export function AuthForm({ type, className, ...props }: AuthFormProps) {
+  const { toast } = useToast();
+  const router = useRouter();
+
   const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+
+  async function signup({ email, password }: { email: string; password: string }) {
+    try {
+      const response = await axios.post(`${backendUrl}/api/auth/signup`, { email, password });
+      console.log(response.data);
+      return response.data;
+    } catch (error) {
+      console.error("Error during signup:", error);
+      toast({
+        title: "Error during signup",
+        description: "Please try again",
+      })
+    }
+  }
+
+  async function signin({ email, password }: { email: string; password: string }) {
+    try {
+      const response = await axios.post(`${backendUrl}/api/auth/signin`, { email, password });
+      console.log(response.data);
+
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+      }
+      return response.data;
+    } catch (error) {
+      console.error("Error during signin:", error);
+      toast({
+        title: "Error during signin",
+        description: "Please try again",
+      })
+    }
+  }
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -52,17 +61,22 @@ export function AuthForm({ type, className, ...props }: AuthFormProps) {
     if (type === "signup") {
       console.log("signup");
       const response = await signup({ email, password });
-      // @ts-ignore
-      alert(response.msg);
+      toast({
+        title: response.msg,
+        description: "Please sign in to your account",
+      })
       setIsLoading(false);
     }
 
     if (type === "signin") {
       console.log("signin");
       const response = await signin({ email, password });
-      // @ts-ignore
-      alert(response.msg);
+      toast({
+        title: response.msg,
+        description: "Redirecting to your dashboard",
+      })
       setIsLoading(false);
+      router.push("/dashboard");
     }
   }
 

@@ -1,6 +1,5 @@
 import { Plus, Zap } from 'lucide-react';
 import { Button } from "../ui/button";
-import { CurrentStatusCard } from './current-status-card';
 import { WebsitesDiv } from './websites-div';
 import { IWebsite } from '@/types/types';
 
@@ -18,30 +17,38 @@ import { Input } from '../ui/input';
 import axios from 'axios';
 import { backendUrl } from '@/lib/constants';
 import { useState } from 'react';
-
-async function addWebsite(url: string) {
-    console.log("Adding website:", url);
-    try {
-        const res = await axios.post(`${backendUrl}/api/website/create`, {
-            url,
-        }, {
-            headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
-        });
-        console.log("Website added:", res.data);
-        alert(url + " website added successfully");
-        return res.data;
-    } catch (error) {
-        console.error("Error adding website:", error);
-        alert("Error adding website");
-        return null;
-    }
-
-}
+import { useToast } from '@/hooks/use-toast';
 
 export function DashboardMain({ websites }: { websites: IWebsite[] }) {
     const [url, setUrl] = useState<string>("");
+    const { toast } = useToast();
+
+    async function addWebsite(url: string) {
+        console.log("Adding website:", url);
+        try {
+            const res = await axios.post(`${backendUrl}/api/website/create`, {
+                url,
+            }, {
+                headers: {
+                    Authorization: `Bearer ${localStorage.getItem("token")}`,
+                },
+            });
+            toast({
+                title: "Website added",
+                description: "Website added successfully",
+            });
+
+            return res.data;
+        } catch (error) {
+            toast({
+                title: "Error adding website",
+                description: "Please try again",
+            });
+            return null;
+        }
+
+    }
+
     return (
         <section className="container py-10 space-y-8">
             <div className="flex md:flex-row flex-col gap-4">

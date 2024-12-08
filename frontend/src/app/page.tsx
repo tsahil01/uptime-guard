@@ -3,6 +3,12 @@ import { Hero } from "@/components/sections/hero";
 import { Navbar } from "@/components/layout/navbar";
 import { Testimonials } from "@/components/sections/testimonials";
 import { LetsGo } from "@/components/sections/letsgo";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "UptimeGuard - Monitor your website's uptime",
+  description: "UptimeGuard is a website monitoring tool that helps you monitor your website's uptime and performance.",
+};
 
 export default function Home() {
   return (

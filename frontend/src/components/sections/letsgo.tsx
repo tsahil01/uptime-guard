@@ -1,10 +1,19 @@
+"use client";
 
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
+import { useEffect, useState } from "react";
 
 
 export function LetsGo() {
+
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    useEffect(() => {
+      const token = localStorage.getItem("token");
+      setIsLoggedIn(!!token);
+    }, []);
+
     return (
         <div className="bg-primary/5 dark:bg-black">
             <section className="container py-24 space-y-8">
@@ -18,12 +27,21 @@ export function LetsGo() {
                     </p>
                 </div>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
-                    <Button size="lg" asChild>
-                        <Link href="/signup">
-                            Start Monitoring
-                            <ArrowRight className="ml-2 h-4 w-4" />
+                    {isLoggedIn ? (
+                        <Link href="/dashboard">
+                            <Button size="lg">
+                                Start Monitoring
+                                <ArrowRight className="ml-2 h-4 w-4" />
+                            </Button>
                         </Link>
-                    </Button>
+                    ) : (
+                        <Link href="/signup">
+                            <Button size="lg">
+                                Start Monitoring
+                                <ArrowRight className="ml-2 h-4 w-4" />
+                            </Button>
+                        </Link>
+                    )}
                     <Button size="lg" variant="outline" asChild>
                         <Link href="/demo">View Live Demo</Link>
                     </Button>

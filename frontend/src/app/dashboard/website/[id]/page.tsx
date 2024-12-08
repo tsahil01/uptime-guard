@@ -7,6 +7,7 @@ import axios from "axios";
 import { backendUrl } from "@/lib/constants";
 import { useEffect, useState } from "react";
 import { IWebsite } from "@/types/types";
+import { useToast } from "@/hooks/use-toast";
 
 async function fetchWebsite(id: string) {
   try {
@@ -19,12 +20,13 @@ async function fetchWebsite(id: string) {
     return res.data;
   } catch (error) {
     console.error("Error fetching website:", error);
-    alert("Error fetching website");
     return null;
   }
 }
 
 export default function WebsitePage() {
+  const toast = useToast();
+
   const [loading, setLoading] = useState(true);
   const [website, setWebsite] = useState<IWebsite | null>(null);
   const router = useRouter();
@@ -33,7 +35,10 @@ export default function WebsitePage() {
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
-      alert("Unauthorized");
+      toast.toast({
+        title: "Not authenticated",
+        description: "Please sign in to view this page",
+      });
       router.push("/");
       return;
     }

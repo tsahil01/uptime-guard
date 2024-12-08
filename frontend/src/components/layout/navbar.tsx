@@ -23,15 +23,21 @@ export function Navbar() {
 
         <div className="flex items-center space-x-4">
           {isLoggedIn ? (
-            <Button
-              variant="ghost"
-              onClick={() => {
-                localStorage.removeItem("token");
-                setIsLoggedIn(false);
-              }}
-            >
-              Sign Out
-            </Button>
+            <>
+              <Link href="/dashboard">
+                <Button variant="ghost">Dashboard</Button>
+              </Link>
+
+              <Button
+                variant="ghost"
+                onClick={() => {
+                  localStorage.removeItem("token");
+                  setIsLoggedIn(false);
+                }}
+              >
+                Sign Out
+              </Button>
+            </>
           ) : (
             <>
               <Button variant="ghost" asChild>
