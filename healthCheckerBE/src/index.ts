@@ -23,10 +23,24 @@ client.on('error', (err) => console.log('Redis Client Error', err));
 
 async function checkStatus({ url }: { url: string }) {
     try {
+        const startTime = Date.now();
         const response = await axios.get(url);
-        return { url, status: 'UP', code: response.status };
+        const responseTime = Date.now() - startTime;
+        return {
+            url,
+            status: 'UP',
+            code: response.status,
+            responseTime,
+            lastChecked: new Date().toISOString()
+        };
     } catch (error: any) {
-        return { url, status: 'DOWN', code: error.response?.status || "N/A" };
+        return {
+            url,
+            status: 'DOWN',
+            code: error.response?.status || "N/A",
+            responseTime: "N/A",
+            lastChecked: new Date().toISOString()
+        };
     }
 }
 
@@ -80,7 +94,7 @@ app.post('/health/single', async (req, res) => {
             });
             return;
         }
-        
+
         const result = await checkStatus({ url });
         await client.set(url, JSON.stringify(result), { EX: 60 }); // 60 seconds
 
