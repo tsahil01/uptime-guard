@@ -9,12 +9,6 @@ import { backendUrl } from "@/lib/constants";
 import { IWebsite } from "@/types/types";
 import { useToast } from "@/hooks/use-toast";
 
-// export const metadata: Metadata = {
-//   title: "Dashboard - UptimeGuard",
-//   description: "Monitor your websites and get notified when they go down",
-// };
-
-
 async function fetchWebsites() {
   try {
     const res = await axios.get(`${backendUrl}/api/website/userAll`, {

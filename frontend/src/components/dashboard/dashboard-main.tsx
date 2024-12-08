@@ -2,7 +2,6 @@ import { Plus, Zap } from 'lucide-react';
 import { Button } from "../ui/button";
 import { WebsitesDiv } from './websites-div';
 import { IWebsite } from '@/types/types';
-
 import {
     Dialog,
     DialogContent,
@@ -11,7 +10,7 @@ import {
     DialogHeader,
     DialogTitle,
     DialogTrigger,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import { Label } from '../ui/label';
 import { Input } from '../ui/input';
 import axios from 'axios';
@@ -23,7 +22,20 @@ export function DashboardMain({ websites }: { websites: IWebsite[] }) {
     const [url, setUrl] = useState<string>("");
     const { toast } = useToast();
 
+    const isValidUrl = (input: string) => {
+        const regex = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+        return regex.test(input);
+    };
+
     async function addWebsite(url: string) {
+        if (!isValidUrl(url)) {
+            toast({
+                title: "Invalid URL",
+                description: "Please enter a valid URL.",
+            });
+            return;
+        }
+
         console.log("Adding website:", url);
         try {
             const res = await axios.post(`${backendUrl}/api/website/create`, {
@@ -46,7 +58,6 @@ export function DashboardMain({ websites }: { websites: IWebsite[] }) {
             });
             return null;
         }
-
     }
 
     return (
@@ -76,22 +87,27 @@ export function DashboardMain({ websites }: { websites: IWebsite[] }) {
                                 <div className="grid gap-4 py-4">
                                     <div className="grid grid-cols-4 items-center gap-4">
                                         <Label htmlFor="url" className="text-right">
-                                            Name
+                                            Enter URL
                                         </Label>
-                                        <Input id="url" className="col-span-3"
-                                            onChange={
-                                                (e) => {
-                                                    setUrl(e.target.value);
-                                                }
-                                            } />
+                                        <Input
+                                            id="url"
+                                            className="col-span-3"
+                                            value={url}
+                                            onChange={(e) => setUrl(e.target.value)}
+                                            required
+                                            pattern="^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$" // URL validation pattern
+                                            placeholder="https://example.com"
+                                        />
                                     </div>
                                 </div>
                                 <DialogFooter>
-                                    <Button onClick={
-                                        async () => {
+                                    <Button
+                                        onClick={async () => {
                                             await addWebsite(url);
-                                        }
-                                    }>Save changes</Button>
+                                        }}
+                                    >
+                                        Save changes
+                                    </Button>
                                 </DialogFooter>
                             </DialogContent>
                         </Dialog>
@@ -110,10 +126,7 @@ export function DashboardMain({ websites }: { websites: IWebsite[] }) {
                         </div>
                     )}
                 </div>
-
-                {/* <CurrentStatusCard up={2} down={2} /> */}
             </div>
         </section>
     );
 }
-

@@ -11,7 +11,6 @@ import { useToast } from "@/hooks/use-toast";
 
 async function fetchWebsite(id: string) {
   try {
-    // url: localhost:3000/api/website/:id
     const res = await axios.get(`${backendUrl}/api/website/${id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`,
