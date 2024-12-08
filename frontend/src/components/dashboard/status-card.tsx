@@ -48,7 +48,7 @@ export function StatusCard({ title, icon: Icon, status, loading }: StatusCardPro
             <h3 className="text-2xl font-bold">{
               status?.lastChecked ? new Date(status.lastChecked).toLocaleTimeString() : "—"
               }</h3>
-            <p className="text-sm text-muted-foreground">Checked every 5 minutes</p>
+            <p className="text-sm text-muted-foreground">Checked every 1 minutes</p>
           </div>
         );
 
