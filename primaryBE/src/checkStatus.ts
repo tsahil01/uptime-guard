@@ -8,3 +8,9 @@ export async function checkStatus({ url }: { url: string }) {
 
     return response.data
 }
+
+export async function statusHistory({ url }: { url: string }) {
+    const response = await axios.get(healthCheckerRoute + '/health/history', { params: { url } });
+    return response.data
+
+}

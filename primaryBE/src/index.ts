@@ -26,8 +26,8 @@ app.use(cors())
 app.use('/api', router)
 
 // run cron jobs
-cron.schedule('*/60 * * * * *', async () => {
-    console.log('running a task every 61 seconds');
+cron.schedule('*/10 * * * * *', async () => {
+    console.log('running a task every 60 seconds');
     await getLatestStatus();
 })
 

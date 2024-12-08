@@ -33,11 +33,25 @@ function checkStatus(_a) {
     return __awaiter(this, arguments, void 0, function* ({ url }) {
         var _b;
         try {
+            const startTime = Date.now();
             const response = yield axios_1.default.get(url);
-            return { url, status: 'UP', code: response.status };
+            const responseTime = Date.now() - startTime;
+            return {
+                url,
+                status: 'UP',
+                code: response.status,
+                responseTime,
+                lastChecked: new Date().toISOString()
+            };
         }
         catch (error) {
-            return { url, status: 'DOWN', code: ((_b = error.response) === null || _b === void 0 ? void 0 : _b.status) || "N/A" };
+            return {
+                url,
+                status: 'DOWN',
+                code: ((_b = error.response) === null || _b === void 0 ? void 0 : _b.status) || "N/A",
+                responseTime: "N/A",
+                lastChecked: new Date().toISOString()
+            };
         }
     });
 }
@@ -86,6 +100,23 @@ app.post('/health/single', (req, res) => __awaiter(void 0, void 0, void 0, funct
         res.json({
             status: 'success',
             data: result
+        });
+    }
+    catch (error) {
+        res.status(400).json({
+            status: 'error',
+            message: error.errors || error.message || error
+        });
+    }
+}));
+app.get('/health/history', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const url = req.query.url;
+    try {
+        urlSchema.parse(url);
+        const history = yield client.lRange(`status:${url}`, 0, -1);
+        res.json({
+            status: 'success',
+            data: history.map((h) => JSON.parse(h))
         });
     }
     catch (error) {

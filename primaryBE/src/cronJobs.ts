@@ -4,21 +4,53 @@ import { checkStatus } from "./checkStatus";
 export async function getLatestStatus() {
     try {
         const websites = await client.lRange('websites', 0, -1);
+
         for (let i = 0; i < websites.length; i++) {
             const ws = JSON.parse(websites[i]);
-            console.log("ws: ", ws);
             const url = ws.url;
+
             const wsStatus = await checkStatus({ url });
 
-            if (wsStatus.data.status != 'UP'){
-                console.log(`${url} is down. sending email to ${ws.email} `);
-                // TODO: send email
+            const statusObject = {
+                url,
+                status: wsStatus.data.status,
+                code: wsStatus.data.code,
+                responseTime: wsStatus.data.responseTime,
+                lastChecked: wsStatus.data.lastChecked
+            };
+
+            const redisKey = `status:${url}`;
+
+            const latestEntry = await client.lIndex(redisKey, -1);
+
+            if (latestEntry) {
+                const latestStatus = JSON.parse(latestEntry);
+                const latestHour = new Date(latestStatus.lastChecked).getHours();
+                const currentHour = new Date().getHours();
+
+                if (latestHour === currentHour && latestStatus.status === statusObject.status) {
+                    console.log(`Status for ${url} already recorded for this hour.`);
+                    continue;
+                }
             }
+            await client.rPush(redisKey, JSON.stringify(statusObject));
+            await client.lTrim(redisKey, -24, -1);
+
+            if (latestEntry) {
+                const latestStatus = JSON.parse(latestEntry);
+                if (latestStatus.status !== statusObject.status) {
+                    console.log(`Status for ${url} has changed. Sending email to ${ws.email}`);
+                    // send email here
+                }
+            }
+
         }
     } catch (error: any) {
         console.log('Failed to get latest status', error);
     }
 }
+
+
 
 export async function checkDbWithRedis() {
     try {

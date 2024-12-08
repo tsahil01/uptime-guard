@@ -2,7 +2,7 @@ import express from 'express';
 import { z } from 'zod';
 import { client, db, jwtsecret } from '../../index';
 import jwt from 'jsonwebtoken';
-import { checkStatus } from '../../checkStatus';
+import { checkStatus, statusHistory } from '../../checkStatus';
 
 const websiteRoute = express.Router();
 
@@ -115,7 +115,13 @@ websiteRoute.get('/check', async (req, res) => {
 
         const { url } = z.object(zodWebsiteSchema).parse(req.query);
         const data = await checkStatus({ url });
-        res.json(data);
+        // get the status history from redis
+        const history = await statusHistory({ url });
+
+        res.json({
+            data,
+            history,
+        });
     } catch (error: any) {
         res.json({
             message: 'Failed to check website',
@@ -123,7 +129,6 @@ websiteRoute.get('/check', async (req, res) => {
         });
     }
 });
-
 
 websiteRoute.get('/:id', async (req, res) => {
     try {

@@ -111,4 +111,23 @@ app.post('/health/single', async (req, res) => {
     }
 });
 
+app.get('/health/history', async (req, res) => {
+    const url = req.query.url as string;
+    try {
+        urlSchema.parse(url);
+
+        const history = await client.lRange(`status:${url}`, 0, -1);
+        res.json({
+            status: 'success',
+            data: history.map((h: string) => JSON.parse(h))
+        });
+
+    } catch (error: z.ZodError | any) {
+        res.status(400).json({
+            status: 'error',
+            message: error.errors || error.message || error
+        });
+    }
+})
+
 app.listen(port, () => console.log(`Server is running on port: ${port}`));
