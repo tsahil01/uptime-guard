@@ -50,6 +50,52 @@ websiteRoute.post('/create', async (req, res) => {
     }
 });
 
+websiteRoute.delete('/:id', async (req, res) => {
+    console.log("Inside Delete")
+    try {
+        const token = req.headers.authorization?.split(' ')[1];
+        if (!token) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+        const decodedToken = jwt.verify(token, jwtsecret) as jwt.JwtPayload & { userId: number };
+        console.log(decodedToken);
+
+        const website = await db.websites.findUnique({
+            where: {
+                id: req.params.id,
+            },
+        });
+        console.log(website);
+
+        if (website?.userId !== `${decodedToken.userId}`) {
+            res.status(401).json({ message: 'Unauthorized' });
+            return;
+        }
+
+        const deletedWebsite = await db.websites.delete({
+            where: {
+                id: req.params.id,
+            },
+        });
+
+        const exists = await client.lRange('websites', 0, -1);
+        if (exists.includes(website.url)) {
+            await client.lRem('websites', 0, website.url)
+        }
+
+        res.json({
+            db: deletedWebsite,
+            msg: 'Website deleted successfully',
+        });
+    } catch (error: any) {
+        res.json({
+            message: 'Website deletion failed',
+            error: error,
+        });
+    }
+});
+
 websiteRoute.get('/userAll', async (req, res) => {
     try {
         const token = req.headers.authorization?.split(' ')[1];

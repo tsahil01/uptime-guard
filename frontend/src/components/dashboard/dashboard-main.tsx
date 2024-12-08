@@ -4,7 +4,44 @@ import { CurrentStatusCard } from './current-status-card';
 import { WebsitesDiv } from './websites-div';
 import { IWebsite } from '@/types/types';
 
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogFooter,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
+import axios from 'axios';
+import { backendUrl } from '@/lib/constants';
+import { useState } from 'react';
+
+async function addWebsite(url: string) {
+    console.log("Adding website:", url);
+    try {
+        const res = await axios.post(`${backendUrl}/api/website/create`, {
+            url,
+        }, {
+            headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+        });
+        console.log("Website added:", res.data);
+        alert(url + " website added successfully");
+        return res.data;
+    } catch (error) {
+        console.error("Error adding website:", error);
+        alert("Error adding website");
+        return null;
+    }
+
+}
+
 export function DashboardMain({ websites }: { websites: IWebsite[] }) {
+    const [url, setUrl] = useState<string>("");
     return (
         <section className="container py-10 space-y-8">
             <div className="flex md:flex-row flex-col gap-4">
@@ -13,10 +50,45 @@ export function DashboardMain({ websites }: { websites: IWebsite[] }) {
                         <h2 className="text-2xl font-bold tracking-tight mb-4 text-left">
                             Monitors
                         </h2>
-                        <Button className="bg-blue-500">
-                            <Plus size={16} className="mr-1" />
-                            New Monitor
-                        </Button>
+                        <Dialog>
+                            <DialogTrigger>
+                                <Button className="bg-blue-500">
+                                    <Plus size={16} className="mr-1" />
+                                    New Monitor
+                                </Button>
+                            </DialogTrigger>
+                            <DialogContent>
+                                <DialogHeader>
+                                    <DialogTitle>
+                                        Add a new monitor
+                                    </DialogTitle>
+                                    <DialogDescription>
+                                        Add a new website to monitor its status.
+                                    </DialogDescription>
+                                </DialogHeader>
+                                <div className="grid gap-4 py-4">
+                                    <div className="grid grid-cols-4 items-center gap-4">
+                                        <Label htmlFor="url" className="text-right">
+                                            Name
+                                        </Label>
+                                        <Input id="url" className="col-span-3"
+                                            onChange={
+                                                (e) => {
+                                                    setUrl(e.target.value);
+                                                }
+                                            } />
+                                    </div>
+                                </div>
+                                <DialogFooter>
+                                    <Button onClick={
+                                        async () => {
+                                            await addWebsite(url);
+                                        }
+                                    }>Save changes</Button>
+                                </DialogFooter>
+                            </DialogContent>
+                        </Dialog>
+
                     </div>
                     {websites.length > 0 ? (
                         websites.map((website, index) => (
@@ -32,7 +104,7 @@ export function DashboardMain({ websites }: { websites: IWebsite[] }) {
                     )}
                 </div>
 
-                <CurrentStatusCard up={2} down={2} />
+                {/* <CurrentStatusCard up={2} down={2} /> */}
             </div>
         </section>
     );
