@@ -49,9 +49,7 @@ signInRouter.post("/signin", async (req, res) => {
 
         const token = jwt.sign({
             userId: user.id,
-        }, jwtsecret, {
-            expiresIn: "1h",
-        });
+        }, jwtsecret);
 
         res.json({
             token,

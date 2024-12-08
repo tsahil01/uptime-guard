@@ -25,14 +25,16 @@ export async function getLatestStatus() {
 
             if (latestEntry) {
                 const latestStatus = JSON.parse(latestEntry);
-                const latestHour = new Date(latestStatus.lastChecked).getHours();
-                const currentHour = new Date().getHours();
+                const latestTime = new Date(latestStatus.lastChecked).getTime();
+                const currentTime = new Date().getTime();
 
-                if (latestHour === currentHour && latestStatus.status === statusObject.status) {
-                    console.log(`Status for ${url} already recorded for this hour.`);
+                const fiveMinutesInMs = 5 * 60 * 1000;
+                if (currentTime - latestTime < fiveMinutesInMs && latestStatus.status === statusObject.status) {
+                    console.log(`Status for ${url} already recorded in the last 5 minutes.`);
                     continue;
                 }
             }
+
             await client.rPush(redisKey, JSON.stringify(statusObject));
             await client.lTrim(redisKey, -24, -1);
 
@@ -40,15 +42,16 @@ export async function getLatestStatus() {
                 const latestStatus = JSON.parse(latestEntry);
                 if (latestStatus.status !== statusObject.status) {
                     console.log(`Status for ${url} has changed. Sending email to ${ws.email}`);
-                    // send email here
+                    // send email
                 }
             }
-
         }
     } catch (error: any) {
         console.log('Failed to get latest status', error);
     }
 }
+
+
 
 
 
