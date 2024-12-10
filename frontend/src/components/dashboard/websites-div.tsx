@@ -46,7 +46,7 @@ export function WebsitesDiv({ website, index }: { website: IWebsite, index: numb
                     </Button>
 
                     <DropdownMenu>
-                        <DropdownMenuTrigger>
+                        <DropdownMenuTrigger asChild>
                             <Button variant={'ghost'} size="sm">
                                 <Edit size={16} />
                             </Button>
