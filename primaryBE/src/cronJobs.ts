@@ -1,5 +1,6 @@
 import { client, db } from ".";
 import { checkStatus } from "./checkStatus";
+import { sendEmail } from "./email";
 
 export async function getLatestStatus() {
     try {
@@ -42,7 +43,15 @@ export async function getLatestStatus() {
                 const latestStatus = JSON.parse(latestEntry);
                 if (latestStatus.status !== statusObject.status) {
                     console.log(`Status for ${url} has changed. Sending email to ${ws.email}`);
-                    // send email
+                    const subject = `Status for ${url} has changed`;
+                    const html = `Status for ${url} has changed from ${latestStatus.status} to ${statusObject.status}`;
+                    const mail = await sendEmail(ws.email, subject, html);
+                    // @ts-ignore
+                    if (mail) {
+                        console.log(`Email sent to ${ws.email}`);
+                    } else {
+                        console.log(`Failed to send email to ${ws.email}`);
+                    }
                 }
             }
         }

@@ -5,11 +5,15 @@ import { PrismaClient } from '@prisma/client';
 import { createClient } from 'redis';
 import cron from 'node-cron';
 import { checkDbWithRedis, getLatestStatus } from './cronJobs';
+require('dotenv').config();
 
 const app = express();
 const port = 4000;
 export const db = new PrismaClient();
 export const jwtsecret = 'secret';
+
+export const smtpHost = process.env.SMTP_HOST || "";
+export const smtpPassword = process.env.SMTP_PASS || "";
 
 export const client = createClient();
 client.on('error', (err) => console.log('Redis Client Error', err));
