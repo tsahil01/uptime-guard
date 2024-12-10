@@ -38,7 +38,7 @@ async function checkStatus({ url }: { url: string }) {
             url,
             status: 'DOWN',
             code: error.response?.status || "N/A",
-            responseTime: "N/A",
+            responseTime: 0,
             lastChecked: new Date().toISOString()
         };
     }
