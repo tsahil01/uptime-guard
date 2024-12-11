@@ -49,7 +49,7 @@ function checkStatus(_a) {
                 url,
                 status: 'DOWN',
                 code: ((_b = error.response) === null || _b === void 0 ? void 0 : _b.status) || "N/A",
-                responseTime: "N/A",
+                responseTime: 0,
                 lastChecked: new Date().toISOString()
             };
         }

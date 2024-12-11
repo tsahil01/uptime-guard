@@ -13,9 +13,11 @@ import {
 import { Edit, Trash2 } from "lucide-react";
 import axios from "axios";
 import { backendUrl } from "@/lib/constants";
+import { useToast } from "@/hooks/use-toast";
 
 export function WebsitesDiv({ website, index }: { website: IWebsite, index: number }) {
     const router = useRouter();
+    const { toast } = useToast();
 
     function handleClick() {
         const id = website.id as string;
@@ -30,6 +32,10 @@ export function WebsitesDiv({ website, index }: { website: IWebsite, index: numb
             },
         });
         console.log(res.data);
+        toast({
+            title: "Website deleted",
+            description: "The website has been deleted successfully",
+        });
         router.refresh()
     }
 

@@ -24,12 +24,13 @@ const testimonials = [
   },
   {
     quote:
-      "The scalability and performance have been game-changing for our organization. Highly recommend to any growing business.",
-    name: "Lisa Thompson",
-    designation: "VP of Technology at FutureNet",
-    src: "https://images.unsplash.com/photo-1624561172888-ac93c696e10c?q=80&w=2592&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+      "UptimeGuard has been a game changer for our business. The real-time alerts and detailed monitoring reports have saved us countless headaches. Highly recommended!",
+    name: "James Carter",
+    designation: "Owner at CarterTech Solutions",
+    src: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=2560&auto=format&fit=crop&ixlib=rb-4.0.3",
   },
 ];
+
 export function Testimonials() {
   return (
       <section className="container py-20 border-t">

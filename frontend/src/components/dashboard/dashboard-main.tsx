@@ -70,8 +70,8 @@ export function DashboardMain({ websites }: { websites: IWebsite[] }) {
                         </h2>
                         <Dialog>
                             <DialogTrigger asChild>
-                                <Button className="bg-blue-500">
-                                    <Plus size={16} className="mr-1" />
+                                <Button size={"lg"} className="bg-blue-900 text-white font-semibold">
+                                    <Plus size={16} className="mr-1 font-semibold" />
                                     New Monitor
                                 </Button>
                             </DialogTrigger>
