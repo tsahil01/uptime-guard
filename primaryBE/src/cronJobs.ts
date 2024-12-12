@@ -1,9 +1,11 @@
 import { client, db } from ".";
 import { checkStatus } from "./checkStatus";
 import { sendEmail } from "./email";
+import { emailTemplate } from "./emailTemplate";
 
 export async function getLatestStatus() {
     try {
+        let currentTime;
         const websites = await client.lRange('websites', 0, -1);
 
         for (let i = 0; i < websites.length; i++) {
@@ -27,7 +29,7 @@ export async function getLatestStatus() {
             if (latestEntry) {
                 const latestStatus = JSON.parse(latestEntry);
                 const latestTime = new Date(latestStatus.lastChecked).getTime();
-                const currentTime = new Date().getTime();
+                currentTime = new Date().getTime();
 
                 const fiveMinutesInMs = 5 * 60 * 1000;
                 if (currentTime - latestTime < fiveMinutesInMs && latestStatus.status === statusObject.status) {
@@ -44,7 +46,15 @@ export async function getLatestStatus() {
                 if (latestStatus.status !== statusObject.status) {
                     console.log(`Status for ${url} has changed. Sending email to ${ws.email}`);
                     const subject = `Status for ${url} has changed`;
-                    const html = `Status for ${url} has changed from ${latestStatus.status} to ${statusObject.status}`;
+                    const html = emailTemplate({
+                        websiteUrl: ws.url,
+                        statusMessage: statusObject.status,
+                        timeDetected: ws.status,
+                        responseCode: statusObject.code,
+                        responseTime: new Date(latestStatus.lastChecked).getTime(),
+                        dashboardUrl: "",
+                        unsubscribeUrl: ""
+                    });
                     const mail = await sendEmail(ws.email, subject, html);
                     // @ts-ignore
                     if (mail) {

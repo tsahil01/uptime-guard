@@ -1,1 +1,1 @@
-{"root":["./src/checkStatus.ts","./src/cronJobs.ts","./src/email.ts","./src/index.ts","./src/types.ts","./src/routes/index.ts","./src/routes/auth/signinRoute.ts","./src/routes/websites/websiteRoute.ts"],"version":"5.7.2"}
+{"root":["./src/checkStatus.ts","./src/cronJobs.ts","./src/email.ts","./src/emailTemplate.ts","./src/index.ts","./src/types.ts","./src/routes/index.ts","./src/routes/auth/signinRoute.ts","./src/routes/websites/websiteRoute.ts"],"version":"5.7.2"}
