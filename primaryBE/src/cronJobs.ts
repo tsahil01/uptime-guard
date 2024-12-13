@@ -49,9 +49,9 @@ export async function getLatestStatus() {
                     const html = emailTemplate({
                         websiteUrl: ws.url,
                         statusMessage: statusObject.status,
-                        timeDetected: ws.status,
+                        timeDetected: ws.lastChecked,
                         responseCode: statusObject.code,
-                        responseTime: new Date(latestStatus.lastChecked).getTime(),
+                        responseTime: statusObject.responseTime,
                         dashboardUrl: "",
                         unsubscribeUrl: ""
                     });

@@ -20,7 +20,7 @@ const features = [
   },
   {
     title: "Telegram Integration",
-    description: "Receive alerts directly to your Telegram account for quick response.",
+    description: "Coming soon! Receive alerts directly to your Telegram account.",
     icon: IconBrandTelegram,
   },
 ];

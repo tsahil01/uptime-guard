@@ -12,9 +12,9 @@ import { UptimeChart } from "./uptime-chart";
 
 const statusItems = [
   { title: "Current Status", icon: ChartNoAxesColumn },
-  { title: "Last Checked", icon: Clock },
   { title: "Status Code", icon: Zap },
   { title: "Response Time", icon: Clock },
+  { title: "Last Checked", icon: Clock },
 ];
 
 async function checkStatus(website: IWebsite) {
@@ -25,7 +25,7 @@ async function checkStatus(website: IWebsite) {
       },
       params: website,
     });
-    console.log("Website checked:", res.data);
+    // console.log("Website checked:", res.data);
     return res.data;
   } catch (error) {
     console.error("Error checking website:", error);
@@ -50,11 +50,11 @@ export function SinglePageMonitor({ website }: { website: IWebsite }) {
     setLoading(true);
     try {
       const res = await checkStatus(website);
-      console.log("Response:", res);
+      // console.log("Response:", res);
       const wsData = res.data;
       const history = res.history;
-      console.log("History:", history);
-      console.log("Website Data:", wsData.data);
+      // console.log("History:", history);
+      // console.log("Website Data:", wsData.data);
 
       if (res) {
         setStatusData({

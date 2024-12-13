@@ -35,8 +35,8 @@ export function StatusCard({ title, icon: Icon, status, loading }: StatusCardPro
               )}
             </div>
             <p className="text-sm text-muted-foreground">
-              {status?.status === "UP" ? "Currently up for 8+ hours" : 
-               status?.status === "DOWN" ? "Down for 8+ hours" : 
+              {status?.status === "UP" ? "Your website is up and running" : 
+               status?.status === "DOWN" ? "Your website is down" : 
                "Status unknown"}
             </p>
           </div>

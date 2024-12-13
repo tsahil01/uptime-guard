@@ -54,7 +54,9 @@ export default function WebsitePage() {
     <main>
       <Navbar />
       {loading ? (
-        <div>Loading...</div>
+        <div className="container py-20 text-center h-full">
+          <span className="text-muted-foreground">Loading...</span>
+        </div>
       ) : (
         website && <SinglePageMonitor website={website} />
       )}

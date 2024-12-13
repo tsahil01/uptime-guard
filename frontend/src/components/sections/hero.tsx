@@ -25,14 +25,16 @@ export function Hero() {
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             {isLoggedIn ? (
-              <Link href="/dashboard">
+              <Link href="/dashboard"
+              prefetch>
                 <Button size="lg">
                   Start Monitoring
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
             ) : (
-              <Link href="/signup">
+              <Link href="/signup"
+              prefetch>
                 <Button size="lg">
                   Start Monitoring
                   <ArrowRight className="ml-2 h-4 w-4" />
