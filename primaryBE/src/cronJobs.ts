@@ -39,17 +39,17 @@ export async function getLatestStatus() {
             }
 
             await client.rPush(redisKey, JSON.stringify(statusObject));
-            await client.lTrim(redisKey, -24, -1);
+            await client.lTrim(redisKey, -50, -1);
 
             if (latestEntry) {
                 const latestStatus = JSON.parse(latestEntry);
                 if (latestStatus.status !== statusObject.status) {
                     console.log(`Status for ${url} has changed. Sending email to ${ws.email}`);
-                    const subject = `Status for ${url} has changed`;
+                    const subject = `Status for ${url} has changed to ${statusObject.status}`;
                     const html = emailTemplate({
                         websiteUrl: ws.url,
                         statusMessage: statusObject.status,
-                        timeDetected: ws.lastChecked,
+                        timeDetected: statusObject.lastChecked,
                         responseCode: statusObject.code,
                         responseTime: statusObject.responseTime,
                         dashboardUrl: "",
