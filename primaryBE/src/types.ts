@@ -1,1 +1,1 @@
-export const healthCheckerRoute = "http://localhost:5000";
+export const healthCheckerRoute = process.env.HEALTH_CHECKER_URL || "http://localhost:5000";

@@ -1,1 +1,1 @@
-export const backendUrl = 'http://localhost:4000';
+export const backendUrl = process.env.PRIMARY_BACKEND_URL || "http://localhost:4000";

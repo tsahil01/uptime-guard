@@ -29,6 +29,7 @@ services:
       REDIS_HOST: redis
       REDIS_PORT: 6379
       DATABASE_URL: postgresql://postgres:postgres@postgres:5432/uptime-postgres?schema=public
+      HEALTH_CHECKER_URL: http://health-checker-backend:5000
 
 
   frontend:
@@ -39,6 +40,8 @@ services:
     restart: always
     container_name: frontend
     command: npm run start
+    environment:
+      PRIMARY_BACKEND_URL: http://primary-backend:4000
 
   redis:
     image: redis:latest
