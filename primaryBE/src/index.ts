@@ -15,7 +15,9 @@ export const jwtsecret = 'secret';
 export const smtpHost = process.env.SMTP_HOST || "";
 export const smtpPassword = process.env.SMTP_PASS || "";
 
-export const client = createClient();
+export const client = createClient({
+    url: `redis://${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || 6379}`
+});
 client.on('error', (err) => console.log('Redis Client Error', err));
 
 (async () => {

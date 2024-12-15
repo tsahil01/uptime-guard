@@ -13,7 +13,9 @@ app.use(cors());
 const urlSchema = z.string().url();
 const urlsSchema = z.array(urlSchema);
 
-const client = createClient();
+export const client = createClient({
+    url: `redis://${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || 6379}`
+});
 client.on('error', (err) => console.log('Redis Client Error', err));
 
 (async () => {

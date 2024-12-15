@@ -77,6 +77,7 @@ export const AnimatedTestimonials = ({
                     duration: 0.4,
                     ease: "easeInOut",
                   }}
+                  // @ts-ignore
                   className="absolute inset-0 origin-bottom"
                 >
                   <Image

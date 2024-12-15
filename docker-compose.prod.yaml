@@ -1,0 +1,46 @@
+version: '3.8'
+services:
+  health-checker-backend:
+    build:
+      context: ./healthCheckerBE
+    ports:
+      - "5000:5000"
+    restart: always
+    container_name: health-checker-backend
+    command: npm run start
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+  primary-backend:
+    build:
+      context: ./primaryBE
+    ports:
+      - "4000:4000"
+    restart: always
+    container_name: primary-backend
+    command: npm run start
+    depends_on:
+      - redis
+    environment:
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      - "3000:3000"
+    restart: always
+    container_name: frontend
+    command: npm run start
+
+  redis:
+    image: redis:latest
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+
