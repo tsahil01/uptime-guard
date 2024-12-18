@@ -13,6 +13,11 @@ app.use(cors());
 const urlSchema = z.string().url();
 const urlsSchema = z.array(urlSchema);
 
+const redisHost = process.env.REDIS_HOST || "nhi mila";
+const redisPort = process.env.REDIS_PORT || 6379;
+
+console.log(redisHost, redisPort);
+
 export const client = createClient({
     url: `redis://${process.env.REDIS_HOST || 'localhost'}:${process.env.REDIS_PORT || 6379}`
 });
