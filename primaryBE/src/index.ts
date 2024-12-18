@@ -31,6 +31,10 @@ app.use(cors())
 // add all routes
 app.use('/api', router)
 
+app.get('/', (req, res) => {
+    res.json({ message: 'Hello World' });
+});
+
 // run cron jobs
 cron.schedule('*/60 * * * * *', async () => {
     console.log('running a task every 60 seconds');
