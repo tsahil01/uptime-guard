@@ -18,7 +18,7 @@ services:
     build:
       context: ./primaryBE
     ports:
-      - "4000:4000"
+      - "5001:5001"
     restart: always
     container_name: primary-backend
     command: npm run start
@@ -32,7 +32,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - "3000:3000"
+      - "5002:5002"
     restart: always
     container_name: frontend
     command: npm run start
