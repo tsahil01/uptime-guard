@@ -7,12 +7,15 @@ export async function getLatestStatus() {
     try {
         let currentTime;
         const websites = await client.lRange('websites', 0, -1);
+        console.log('websites: ', websites);
 
         for (let i = 0; i < websites.length; i++) {
             const ws = JSON.parse(websites[i]);
+            console.log('ws: ', ws);
             const url = ws.url;
 
             const wsStatus = await checkStatus({ url });
+            console.log('wsStatus: ', wsStatus);
 
             const statusObject = {
                 url,
@@ -27,7 +30,9 @@ export async function getLatestStatus() {
             const latestEntry = await client.lIndex(redisKey, -1);
 
             if (latestEntry) {
+                console.log('latestEntry: ', latestEntry);
                 const latestStatus = JSON.parse(latestEntry);
+                console.log('latestStatus: ', latestStatus);
                 const latestTime = new Date(latestStatus.lastChecked).getTime();
                 currentTime = new Date().getTime();
 
