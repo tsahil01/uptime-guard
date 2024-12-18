@@ -5,7 +5,10 @@ import { PrismaClient } from '@prisma/client';
 import { createClient } from 'redis';
 import cron from 'node-cron';
 import { checkDbWithRedis, getLatestStatus } from './cronJobs';
+import { healthCheckerRoute } from './types';
 require('dotenv').config();
+
+console.log('The value of HEALTH_CHECKER_URL is:', healthCheckerRoute);
 
 const app = express();
 const port = 4000;
