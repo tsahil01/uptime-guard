@@ -1,1 +1,2 @@
-export const backendUrl = process.env.PRIMARY_BACKEND_URL || "http://localhost:4000";
+require('dotenv').config();
+export const backendUrl = process.env.NEXT_PUBLIC_PRIMARY_BACKEND_URL || "http://localhost:4000";
