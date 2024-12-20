@@ -7,11 +7,11 @@ import { useEffect, useState } from "react";
 
 export function Hero() {
 
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-    useEffect(() => {
-      const token = localStorage.getItem("token");
-      setIsLoggedIn(!!token);
-    }, []);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsLoggedIn(!!token);
+  }, []);
 
   return (
     <div className="relative">
@@ -26,7 +26,7 @@ export function Hero() {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             {isLoggedIn ? (
               <Link href="/dashboard"
-              prefetch>
+                prefetch>
                 <Button size="lg">
                   Start Monitoring
                   <ArrowRight className="ml-2 h-4 w-4" />
@@ -34,16 +34,18 @@ export function Hero() {
               </Link>
             ) : (
               <Link href="/signup"
-              prefetch>
+                prefetch>
                 <Button size="lg">
                   Start Monitoring
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Link>
             )}
-            <Button size="lg" variant="outline" asChild>
-              <Link href="/demo">View Live Demo</Link>
-            </Button>
+            <Link href="/demo">
+              <Button size="lg" variant="outline">
+                View Live Demo
+              </Button>
+            </Link>
           </div>
         </div>
       </div>

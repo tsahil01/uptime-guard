@@ -28,19 +28,19 @@ export function LetsGo() {
                 </div>
                 <div className="flex flex-col sm:flex-row justify-center gap-4">
                     {isLoggedIn ? (
-                        <Link href="/dashboard">
                             <Button size="lg">
+                        <Link href="/dashboard" className="flex flex-row items-center">
                                 Start Monitoring
                                 <ArrowRight className="ml-2 h-4 w-4" />
-                            </Button>
                         </Link>
+                            </Button>
                     ) : (
-                        <Link href="/signup">
                             <Button size="lg">
+                        <Link href="/signup" className="flex flex-row items-center">
                                 Start Monitoring
                                 <ArrowRight className="ml-2 h-4 w-4" />
-                            </Button>
                         </Link>
+                            </Button>
                     )}
                     <Button size="lg" variant="outline" asChild>
                         <Link href="/demo">View Live Demo</Link>
