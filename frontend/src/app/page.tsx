@@ -5,6 +5,7 @@ import { Testimonials } from "@/components/sections/testimonials";
 import { LetsGo } from "@/components/sections/letsgo";
 import { Metadata } from "next";
 import { ApplicationPreview } from "@/components/sections/app-preview";
+import { NotificaitonSection } from "@/components/sections/notification";
 
 export const metadata: Metadata = {
   title: "UptimeGuard - Monitor your website's uptime",
@@ -16,6 +17,7 @@ export default function Home() {
     <main>
       <Navbar />
       <Hero />
+      <NotificaitonSection />
       <Features />
       <ApplicationPreview />
       <Testimonials />

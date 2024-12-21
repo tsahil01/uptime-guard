@@ -27,11 +27,11 @@ export function ApplicationPreview() {
         <div className="flex md:flex-row flex-col gap-10 justify-between items-center">
 
           {/* Mobile Image */}
-          <div className="md:w-full bg-primary/10 rounded-xl p-3 md:hidden block">
+          <div className="md:w-full bg-primary/10 rounded-xl md:p-3 p-1 md:hidden block">
             <Image
               src="/dashboardFull.png"
               alt="Dashboard"
-              className="w-full h-full object-cover"
+              className="w-full h-full object-cover rounded-xl"
               width={1000}
               height={1000}
             />
