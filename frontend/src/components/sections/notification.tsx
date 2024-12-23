@@ -1,4 +1,3 @@
-
 import { DeviceFrameset } from "react-device-frameset";
 import 'react-device-frameset/styles/marvel-devices.min.css'
 import { Notificaiton } from "../notification/notifationComponent";
@@ -12,8 +11,8 @@ export function NotificaitonSection() {
                     <h2 className="text-3xl font-bold tracking-tight mb-4">
                         Get real-time notifications on your telegram
                     </h2>
-                    <p className="text-muted-foreground max-w-2xl mx-auto">
-                        Get Up time & Down time notifications on your telegram when your website goes down or up.
+                    <p className="text-muted max-w-2xl mx-auto">
+                        Stay tuned for real-time uptime & downtime notifications for your website.
                     </p>
                 </div>
 
@@ -30,8 +29,8 @@ export function NotificaitonSection() {
                             <h1 className="text-3xl font-bold ">
                                 Get real-time notifications on your telegram
                             </h1>
-                            <p className="">
-                                Get Up time & Down time notifications on your telegram when your website goes down or up.
+                            <p className="text-muted max-w-2xl mx-auto">
+                                Stay tuned for real-time uptime & downtime notifications for your website.
                             </p>
                         </div>
                     </div>
@@ -41,4 +40,3 @@ export function NotificaitonSection() {
         </>
     )
 }
-
