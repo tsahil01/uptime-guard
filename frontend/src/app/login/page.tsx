@@ -1,14 +1,23 @@
+"use client"
+
 import { Metadata } from "next";
 import Link from "next/link";
 import { AuthForm } from "@/components/auth/auth-form";
 import { AuthSidePanel } from "@/components/auth/auth-side-panel";
+import { useSearchParams } from "next/navigation";
 
-export const metadata: Metadata = {
-  title: "Sign In - UptimeGuard",
-  description: "Sign in to your UptimeGuard account",
-};
+// export const metadata: Metadata = {
+//   title: "Sign In - UptimeGuard",
+//   description: "Sign in to your UptimeGuard account",
+// };
 
 export default function SignInPage() {
+
+  const searchParams = useSearchParams();
+  const email = searchParams.get("email") || "";
+  const password = searchParams.get("password") || "";
+
+
   return (
     <div className="container relative min-h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
       <AuthSidePanel />
@@ -22,7 +31,10 @@ export default function SignInPage() {
               Enter your email below to sign in to your account
             </p>
           </div>
-          <AuthForm type="signin" />
+          <AuthForm type="signin" prefill={{
+            email: email,
+            password: password
+          }} />
           <p className="px-8 text-center text-sm text-muted-foreground">
             Don't have an account?{" "}
             <Link

@@ -8,19 +8,28 @@ import { backendUrl } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface AuthFormProps extends React.HTMLAttributes<HTMLDivElement> {
   type: "signin" | "signup";
+  prefill?: { email?: string; password?: string };
 }
 
-export function AuthForm({ type, className, ...props }: AuthFormProps) {
+export function AuthForm({ type, prefill, className, ...props }: AuthFormProps) {
   const { toast } = useToast();
   const router = useRouter();
 
+  useEffect(() => { 
+    if (prefill) {
+      setEmail(prefill.email || "");
+      setPassword(prefill.password || "");
+    }
+  }, [prefill]);
+
   const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState(prefill?.email || "");
+  const [password, setPassword] = useState(prefill?.password || "");
+
 
   async function signup({ email, password }: { email: string; password: string }) {
     try {
@@ -90,6 +99,7 @@ export function AuthForm({ type, className, ...props }: AuthFormProps) {
               id="email"
               type="email"
               placeholder="Enter your email"
+              value={email}
               required
               disabled={isLoading}
               onChange={
@@ -103,6 +113,7 @@ export function AuthForm({ type, className, ...props }: AuthFormProps) {
               id="password"
               type="password"
               placeholder="Enter your password"
+              value={password}
               required
               disabled={isLoading}
               onChange={

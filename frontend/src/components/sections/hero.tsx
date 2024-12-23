@@ -4,14 +4,20 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useRouter } from 'next/navigation';
 
 export function Hero() {
+  const router = useRouter();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsLoggedIn(!!token);
   }, []);
+
+  const handleDemoRedirect = () => {
+    router.push('/login?email=demo@demo.com&password=demo1234');
+  };
 
   return (
     <div className="relative">
@@ -41,11 +47,9 @@ export function Hero() {
                 </Button>
               </Link>
             )}
-            <Link href="/demo">
-              <Button size="lg" variant="outline">
-                View Live Demo
-              </Button>
-            </Link>
+            <Button size="lg" variant="outline" onClick={handleDemoRedirect}>
+              View Live Demo
+            </Button>
           </div>
         </div>
       </div>
